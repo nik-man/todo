@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>to do list</title>
+  <script src="https://unpkg.com/vue"></script>
+  <style>
+    body {
+      font-family: Arial;
+    }
+  </style>
+</head>
+
+<body>
+  <input type="button" value="new task"></input>
+  <div id="app">
+    <ul>
+      <li v-for="task in tasks">
+        {{ task }}
+        <button @click="edit(task)">edit</button>
+        <button @click="deleteTask(task)">delete</button>
+      </li>
+    </ul>
+  </div>
+</body>
+
+</html>
+
+<script>
+  const app = new Vue({
+    el: '#app',
+    data: {
+      tasks: [
+        'create back',
+        'create mongodb',
+        'get request to back for this list'
+      ]
+    },
+    methods: {
+      edit: (task) => {
+        alert(`Here will be editor of task: \n ${task}`); 
+      },
+      deleteTask: (task) => {
+        confirm(`Are you sure to delete the task: \n ${task}`);
+      }
+    }
+  })
+</script>
