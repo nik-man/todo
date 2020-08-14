@@ -1,0 +1,28 @@
+body {
+  font-family: Arial;
+}
+
+table {
+  width: 50%;
+}
+
+.doneButtonCol {
+  text-align: center;
+}
+
+.deleteButtonCol {
+  text-align: end;
+}
+
+caption {
+  font-weight: bold;
+}
+
+tr:hover {
+  background-color: rgb(230, 230, 230);
+}
+
+#createButton {
+  background: rgb(211, 248, 211);
+  border: darkgreen;
+}

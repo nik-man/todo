@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>to do list</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <link rel="stylesheet" type="text/css" href="style.css"/>
+</head>
+
+<body>
+  <div id="app">
+    <input id="createButton" type="button" value="Create new task" v-on:click="create()"></input>
+    <br />
+    <table v-if="tasks.findIndex((t) => t.state === 'todo') > -1">
+      <caption>to do list:</caption>
+      <tr v-for="(task, index) in tasks" v-if="task.state === 'todo'">
+        <td width="60%">{{ task.text }}</td>
+        <td width="10%"><button @click="edit(task, index)">edit</button></td>
+        <td class="doneButtonCol"><button @click="done(task, index)">done</button></td>
+        <td class="deleteButtonCol"><button @click="deleteTask(task, index)">delete</button></td>
+      </tr>
+    </table>
+    <table v-if="tasks.findIndex((t) => t.state === 'done') > -1">
+      <caption>done list:</caption>
+      <tr v-for="(task, index) in tasks" v-if="task.state==='done'">
+        <td width="70%">{{ task.text }}</td>
+        <td class="doneButtonCol"><button @click="undone(task, index)">undone</button></td>
+        <td class="deleteButtonCol"><button @click="deleteTask(task, index)">delete</button></td>
+      </tr>
+    </table>
+  </div>
+</body>
+
+</html>
+
+<script>
+  const app = new Vue({
+    el: '#app',
+    data: {
+      tasks: [
+        { id: 101, text: 'create back', state: 'todo' },
+        { id: 102, text: 'create mongodb', state: 'todo' },
+        { id: 103, text: 'get request to back for this list', state: 'todo' },
+      ]
+    },
+    methods: {
+      create: function () {
+        console.log('create');
+        const text = prompt(`Create new task:`);
+        if (text) { this.tasks.push({ id: 100 + this.tasks.length, text, state: 'todo' }); }
+      },
+      edit: (task) => {
+        const text = prompt(`Edition task:`, task.text);
+        if (text) { task.text = text; }
+      },
+      deleteTask: function (task, index) {
+        if (!confirm(`Are you sure to delete the task? \n ${task.text}`)) { return; }
+        this.tasks.splice(index, 1);
+      },
+      done: (task) => {
+        task.state = 'done';
+      },
+      undone: (task) => {
+        task.state = 'todo';
+      }
+    }
+  })
+</script>
