@@ -1,0 +1,8 @@
+
+# hello page
+GET http://localhost:3000 HTTP/1.1
+
+### delimiter
+
+# tasks list
+GET http://localhost:3000/list HTTP/1.1

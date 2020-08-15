@@ -6,23 +6,23 @@ table {
   width: 50%;
 }
 
-.doneButtonCol {
+caption {
+  font-weight: bold;
+}
+
+.colButtonDone {
   text-align: center;
 }
 
-.deleteButtonCol {
+.colButtonDelete {
   text-align: end;
-}
-
-caption {
-  font-weight: bold;
 }
 
 tr:hover {
   background-color: rgb(230, 230, 230);
 }
 
-#createButton {
+#buttonCreate {
   background: rgb(211, 248, 211);
-  border: darkgreen;
+  border-width: .5px;
 }
