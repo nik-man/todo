@@ -5,11 +5,8 @@ window.addEventListener('load', () => {
     data,
     methods,
     created() {
-      fetch('http://localhost:3000/list',
-        { mode: 'cors' })
-        .then(response => {
-          console.log(response);
-          return response.json(); })
+      fetch('http://localhost:3000/list')
+        .then(response => response.json())
         .then(json => {
           this.tasks = json;
         })
@@ -26,22 +23,67 @@ const data = {
 };
 
 const methods = {
-  create: function () {
+  create: async function () {
     const text = prompt(`Create new task:`);
-    if (text) { this.tasks.push({ id: 100 + this.tasks.length, text, state: 'todo' }); }
+    if (!text) { return; }
+    const newTask = await postTask(text);
+    // this.tasks.push({ id: 100 + this.tasks.length, text, state: 'todo' }); }
+    console.log(newTask);
+    this.tasks.push(newTask);
   },
   edit: (task) => {
     const text = prompt(`Edition task:`, task.text);
-    if (text) { task.text = text; }
+    if (!text || text === task.text) { return; }
+    task.text = text;
+    putTaskText(task);
   },
   deleteTask: function (task, index) {
-    if (!confirm(`Are you sure to delete the task? \n ${task.text}`)) { return; }
+    if (!confirm(`Are you sure to delete the task? \n ${task.text}
+    state: ${task.state}`)) { return; }
     this.tasks.splice(index, 1);
+    httpDeleteTask(task);
   },
   done: (task) => {
     task.state = 'done';
+    putTaskState(task);
   },
   undone: (task) => {
     task.state = 'todo';
+    putTaskState(task);
   }
 };
+
+function putTaskState(task) {
+  fetch(
+    `http://localhost:3000/task/${task.id}?state=${task.state}`,
+    {
+      method: 'PUT',
+    });
+}
+
+function putTaskText(task) {
+  fetch(
+    `http://localhost:3000/task/${task.id}?text=${task.text}`,
+    {
+      method: 'PUT',
+    });
+}
+
+function httpDeleteTask(task) {
+  fetch(
+    `http://localhost:3000/task/${task.id}`,
+    {
+      method: 'DELETE',
+    });
+}
+
+async function postTask(task) {
+  const response = await fetch(`http://localhost:3000/task`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ state }) // body data type must match "Content-Type" header
+  });
+  return await response.json(); // parses JSON response into native JavaScript objects
+}

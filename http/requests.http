@@ -1,8 +1,30 @@
-
 # hello page
 GET http://localhost:3000 HTTP/1.1
 
 ### delimiter
-
 # tasks list
 GET http://localhost:3000/list HTTP/1.1
+
+###
+# update task
+POST http://localhost:3000/task HTTP/1.1
+content-type: application/json
+
+{
+  "text": "this is the new task text2"
+}
+
+###
+DELETE http://localhost:3000/task/101 HTTP/1.1
+
+###
+#
+OPTIONS http://localhost:3000/task HTTP/1.1
+
+###
+
+PUT http://localhost:3000/task/101?state=todo2 HTTP/1.1
+
+###
+
+PUT http://localhost:3000/task/101?text=back:create back2 HTTP/1.1
