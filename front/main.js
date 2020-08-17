@@ -27,8 +27,6 @@ const methods = {
     const text = prompt(`Create new task:`);
     if (!text) { return; }
     const newTask = await postTask(text);
-    // this.tasks.push({ id: 100 + this.tasks.length, text, state: 'todo' }); }
-    console.log(newTask);
     this.tasks.push(newTask);
   },
   edit: (task) => {
@@ -77,13 +75,13 @@ function httpDeleteTask(task) {
     });
 }
 
-async function postTask(task) {
+async function postTask(text) {
   const response = await fetch(`http://localhost:3000/task`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ state }) // body data type must match "Content-Type" header
+    body: JSON.stringify({ text }) // body data type must match "Content-Type" header
   });
   return await response.json(); // parses JSON response into native JavaScript objects
 }
