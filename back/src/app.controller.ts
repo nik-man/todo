@@ -1,6 +1,6 @@
 import { Controller, Get, Put, Param, Query, Delete, Post, Body } from '@nestjs/common';
 import { AppService } from './app.service';
-import { Task } from './app.adapter';
+import { TTask } from './app.adapter';
 
 export class TaskDto {
   text: string;
@@ -17,28 +17,27 @@ export class AppController {
   }
 
   @Get('list')
-  getList(): Task[] {
-    return this.appService.getList();
+  async getList(): Promise<TTask[]> {
+    return await this.appService.getList();
   }
 
   @Put('task/:id')
-  updateTask(@Param('id') sid: string, @Query() params: TaskDto) {
-    if (!sid || !params) { return {}; }
-    const id = parseInt(sid);
+  updateTask(@Param('id') id: string, @Query() params: TaskDto) {
+    if (!id || !params) { return {}; }
     this.appService.updateTask({ id, ...params });
     return {};
   }
 
   @Delete('task/:id')
-  deleteTask(@Param('id') sid: string) {
-    if (!sid) { return; }
-    this.appService.deleteTask(parseInt(sid));
+  deleteTask(@Param('id') id: string) {
+    if (!id) { return; }
+    this.appService.deleteTask(id);
     return {};
   }
 
   @Post('task')
-  createTask(@Body() { text }: TaskDto) {
+  async createTask(@Body() { text }: TaskDto) {
     if (!text) { return; }
-    return this.appService.createTask(text);
+    return await this.appService.createTask(text);
   }
 }

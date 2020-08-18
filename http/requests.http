@@ -11,7 +11,7 @@ POST http://localhost:3000/task HTTP/1.1
 content-type: application/json
 
 {
-  "text": "this is the new task text23"
+  "text": "this is the new task text"
 }
 
 ###
