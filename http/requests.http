@@ -11,11 +11,11 @@ POST http://localhost:3000/task HTTP/1.1
 content-type: application/json
 
 {
-  "text": "this is the new task text"
+  "text": "this is the new task text2"
 }
 
 ###
-DELETE http://localhost:3000/task/101 HTTP/1.1
+DELETE http://localhost:3000/task/5f3bfe2b7f08450af083748e HTTP/1.1
 
 ###
 #
@@ -23,8 +23,8 @@ OPTIONS http://localhost:3000/task HTTP/1.1
 
 ###
 
-PUT http://localhost:3000/task/101?state=todo2 HTTP/1.1
+PUT http://localhost:3000/task/5f3d4dadc108631f2067af03?state=done HTTP/1.1
 
 ###
 
-PUT http://localhost:3000/task/101?text=back:create back2 HTTP/1.1
+PUT http://localhost:3000/task/5f3d4dadc108631f2067af03?text=back:create back224 HTTP/1.1

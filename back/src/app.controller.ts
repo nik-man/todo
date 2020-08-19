@@ -1,6 +1,5 @@
 import { Controller, Get, Put, Param, Query, Delete, Post, Body } from '@nestjs/common';
-import { AppService } from './app.service';
-import { TTask } from './app.adapter';
+import { AppService, TTask } from './app.service';
 
 export class TaskDto {
   text: string;
