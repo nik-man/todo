@@ -1,42 +1,59 @@
 import { Injectable } from '@nestjs/common';
-import { db, Task } from './app.adapter';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Task } from './tasks/task.schema';
 import { TaskDto } from './app.controller';
+
+export type TTask = {
+  id: string,
+  text: string,
+  state: string,
+};
 
 @Injectable()
 export class AppService {
+
+  constructor(@InjectModel(Task.name) private readonly taskModel: Model<Task>) { }
+
   getHello(): string {
     return 'Hello World!';
   }
 
-  getList(): Task[] {
-    return db.tasks;
+  async getList(): Promise<TTask[]> {
+    const dbTasks = await this.taskModel.find().exec();
+    const tasks = dbTasks.map((task) => {
+      return { id: task._id, text: task.text, state: task.state };
+    });
+    return tasks;
   }
 
-  updateTask({ id, text, state }: Task) {
-    const taskIndex = db.tasks.findIndex(task => task.id === id);
-    if (taskIndex < 0) { return; }
-    const task = db.tasks[taskIndex];
+  async updateTask({ id, text, state }: TTask) {
+    if (!id) { return; }
+    const task = await this.taskModel.findOne({ _id: id }).exec();
+    if (!task) { return; }
     if (state && task.state !== state) {
-      task.state = state;
-      db.tasks[taskIndex] = task;
+      await this.taskModel.updateOne({ _id: id }, { state }).exec();
     }
     if (text && task.text !== text) {
-      task.text = text;
-      db.tasks[taskIndex] = task;
+      await this.taskModel.updateOne({ _id: id }, { text }).exec();
     }
   }
 
-  deleteTask(id: number) {
+  async deleteTask(id: string) {
     if (!id) { return; }
-    const taskIndex = db.tasks.findIndex(task => task.id === id);
-    if (taskIndex < 0) { return; }
-    db.tasks.splice(taskIndex, 1);
+    const res = await this.taskModel.deleteOne({ _id: id }).exec();
+    console.log(res);
   }
 
-  createTask(text: string) {
-    const id = db.tasks.reduce<number>((maxId, task) => Math.max(maxId, task.id), 0) + 1;
-    const newTask: Task = { id, text, state: 'todo' };
-    db.tasks.push(newTask);
-    return newTask;
+  async createTask(text: string): Promise<TTask> {
+    const newTaskDto: TaskDto = { text, state: 'todo' };
+    const createdTask = new this.taskModel(newTaskDto);
+    const newDbTask: Task = await createdTask.save();
+    console.log(newDbTask);
+    return dbTask2Task(newDbTask);
   }
+}
+
+function dbTask2Task({ _id, text, state }: Task): TTask {
+  return { id: _id, text, state };
 }
