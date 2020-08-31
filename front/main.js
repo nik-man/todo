@@ -1,5 +1,10 @@
 
 window.addEventListener('load', () => {
+  // register modal component
+  Vue.component("modal", {
+    template: "#dialog-create-template"
+  });
+
   const app = new Vue({
     el: '#app',
     data,
@@ -19,7 +24,8 @@ const data = {
     { id: 101, text: 'create back', state: 'todo' },
     { id: 102, text: 'create mongodb', state: 'todo' },
     { id: 103, text: 'get request to back for this list', state: 'todo' },
-  ]
+  ],
+  isOpenDialogCreate: false,
 };
 
 const methods = {
@@ -48,6 +54,14 @@ const methods = {
   undone: (task) => {
     task.state = 'todo';
     putTaskState(task);
+  },
+  openDialogCreate: function () {
+    // alert('open dialog create here');
+    this.isOpenDialogCreate = true;
+  },
+  closeDialogCreate: function () {
+    // alert('close dialog create here');
+    this.isOpenDialogCreate = false;
   }
 };
 
