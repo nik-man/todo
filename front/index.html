@@ -4,8 +4,9 @@
 <head>
   <title>to do list</title>
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <!--script src="dialogCreate.html"></script-->
+  <!--div w3-include-html="dialogCreate.html"></div-->
   <script src="main.js"></script>
-  <script src="dialogCreate.html"></script>
   <link rel="stylesheet" type="text/css" href="style.css" />
   <link rel="stylesheet" type="text/css" href="modal.css" />
   <script type="text/x-template" id="dialog-create-template">
@@ -13,25 +14,25 @@
       <div class="modal-mask">
         <div class="modal-wrapper">
           <div class="modal-container">
-  
+
             <div class="modal-header">
               <slot name="header">
                 default header
               </slot>
             </div>
-  
+
             <div class="modal-body">
               <slot name="body">
                 default body
               </slot>
             </div>
-  
+
             <div class="modal-footer">
               <slot name="footer">
-                default footer
-                <button class="modal-default-button" @click="$emit('close')">
-                  OK
-                </button>
+                <div class="modal-buttons">
+                  <input class="modal-default-button" type="button" value=" OK " @click="$emit('submit')"></input>
+                  <input class="modal-cancel-button" type="button" value=" Cancel " @click="$emit('submit')"></input>
+                </div>
               </slot>
             </div>
           </div>
@@ -46,12 +47,33 @@
     <input id="buttonCreate" type="button" value="Create new task" v-on:click="create()"></input>
     <input id="buttonCreateDialog" type="button" value="Create new task with options"
       v-on:click="openDialogCreate()"></input>
-    <modal v-if="isOpenDialogCreate" @close="closeDialogCreate()"></modal>
+    <dialog-create-task v-if="isOpenDialogCreate" @submit="closeDialogCreate()">
+      <p slot="header">Create new task:</p>
+      <div slot="body">
+        <input class="modal-input-text" type="text"
+        v-model="activeTask.text" placeholder="введите текст задачи"></input>
+        <br><br>
+        Субъект:
+        <select v-model="subjects[0].id">
+          <option v-for="subject in subjects" v-bind:value="subject.id">
+            {{ subject.name }}
+          </option>
+        </select>
+      </div>
+    </dialog-create-task>
     <br />
     <table v-if="tasks.findIndex((t) => t.state === 'todo') > -1">
       <caption>to do list:</caption>
+      <thead>
+        <tr>
+          <th>task</th>
+          <th>subject</th>
+          <th colspan="3">actions</th>
+        </tr>
+      </thead>
       <tr v-for="(task, index) in tasks" v-if="task.state === 'todo'">
         <td width="60%">{{ task.text }}</td>
+        <td>{{ task.subject.name }}</td>
         <td width="10%"><button @click="edit(task, index)">edit</button></td>
         <td class="colButtonDone"><button @click="done(task, index)">done</button></td>
         <td class="colButtonDelete"><button @click="deleteTask(task, index)">delete</button></td>
@@ -59,8 +81,16 @@
     </table>
     <table v-if="tasks.findIndex((t) => t.state === 'done') > -1">
       <caption>done list:</caption>
+      <thead>
+        <tr>
+          <th>task</th>
+          <th>subject</th>
+          <th colspan="2">actions</th>
+        </tr>
+      </thead>
       <tr v-for="(task, index) in tasks" v-if="task.state==='done'">
-        <td width="70%">{{ task.text }}</td>
+        <td width="60%">{{ task.text }}</td>
+        <td>{{ task.subject.name }}</td>
         <td class="colButtonDone"><button @click="undone(task, index)">undone</button></td>
         <td class="colButtonDelete"><button @click="deleteTask(task, index)">delete</button></td>
       </tr>

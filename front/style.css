@@ -6,6 +6,23 @@ table {
   width: 50%;
 }
 
+thead {
+  background: lightgrey;
+}
+
+th {
+  font-weight: normal;
+}
+
+thead tr:hover {
+  background: lightgrey;
+  /* to disable tr:hover rule for head */
+}
+
+tr:hover {
+  background-color: rgb(230, 230, 230);
+}
+
 caption {
   font-weight: bold;
 }
@@ -16,10 +33,6 @@ caption {
 
 .colButtonDelete {
   text-align: end;
-}
-
-tr:hover {
-  background-color: rgb(230, 230, 230);
 }
 
 #buttonCreate {

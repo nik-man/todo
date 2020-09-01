@@ -1,5 +1,5 @@
 import { Controller, Get, Put, Param, Query, Delete, Post, Body } from '@nestjs/common';
-import { AppService, TTask } from './app.service';
+import { AppService, TTask, TSubject } from './app.service';
 
 export class TaskDto {
   text: string;
@@ -18,6 +18,11 @@ export class AppController {
   @Get('list')
   async getList(): Promise<TTask[]> {
     return await this.appService.getList();
+  }
+
+  @Get('list-subjects')
+  async getListSubjects(): Promise<TSubject[]> {
+    return await this.appService.getListSubjects();
   }
 
   @Put('task/:id')

@@ -12,7 +12,7 @@ export type TTask = {
   subject: TSubject,
 };
 
-type TSubject = {
+export type TSubject = {
   id: string,
   name: string,
 };
@@ -24,14 +24,16 @@ type TaskAggRecord = Task & {
 @Injectable()
 export class AppService {
 
-  constructor(@InjectModel(Task.name) private readonly taskModel: Model<Task>) { }
+  constructor(
+    @InjectModel(Task.name) private readonly taskModel: Model<Task>,
+    @InjectModel(Subject.name) private readonly subjectModel: Model<Subject>
+  ) { }
 
   getHello(): string {
     return 'Hello World!';
   }
 
   async getList(): Promise<TTask[]> {
-
     const tars: TaskAggRecord[] = await this.taskModel.aggregate([
       {
         $lookup:
@@ -47,6 +49,13 @@ export class AppService {
     const tasks = tars.map(taskAggRec2Task);
     console.log(tasks);
     return tasks;
+  }
+
+  async getListSubjects(): Promise<TSubject[]> {
+    const subjs: Subject[] = await this.subjectModel.find().exec();
+    const res = subjs.map((subj) => { return { id: subj._id, name: subj.name }; });
+    console.log(res);
+    return res;
   }
 
   async updateTask({ id, text, state }: Partial<TTask>) {

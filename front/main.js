@@ -1,31 +1,47 @@
 
+
 window.addEventListener('load', () => {
   // register modal component
-  Vue.component("modal", {
+  Vue.component('dialog-create-task', {
     template: "#dialog-create-template"
+    // template: dialogCreateTemplate
+    // template: dialogCreateTemplate['#dialog-create-template']
   });
 
   const app = new Vue({
     el: '#app',
     data,
     methods,
-    created() {
-      fetch('http://localhost:3000/list')
-        .then(response => response.json())
-        .then(json => {
-          this.tasks = json;
-        })
+    async created() {
+      const { tasks, subjects } = await getInitData();
+      this.tasks = tasks;
+      this.subjects = subjects;
     }
   });
 });
 
 const data = {
   tasks: [
-    { id: 101, text: 'create back', state: 'todo' },
-    { id: 102, text: 'create mongodb', state: 'todo' },
-    { id: 103, text: 'get request to back for this list', state: 'todo' },
+    {
+      id: 101, text: 'create back', state: 'todo',
+      subject: { id: '', name: '' }
+    },
+    {
+      id: 102, text: 'create mongodb', state: 'todo',
+      subject: { id: '', name: '' }
+    },
+    {
+      id: 103, text: 'get request to back for this list', state: 'todo',
+      subject: { id: '', name: '' }
+    },
+  ],
+  subjects: [
+    { id: '', name: '<не указан>' }
   ],
   isOpenDialogCreate: false,
+  activeTask: {
+    text: '', subject: { id: '', name: '' }
+  }
 };
 
 const methods = {
@@ -64,6 +80,18 @@ const methods = {
     this.isOpenDialogCreate = false;
   }
 };
+
+async function getInitData() {
+  const initData = {
+    tasks: [],
+    subjects: []
+  };
+  const responseTasks = await fetch('http://localhost:3000/list');
+  initData.tasks = await responseTasks.json();
+  const responseSubjects = await fetch('http://localhost:3000/list-subjects');
+  initData.subjects = await responseSubjects.json();
+  return initData;
+}
 
 function putTaskState(task) {
   fetch(

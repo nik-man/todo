@@ -6,6 +6,10 @@ GET http://localhost:3000 HTTP/1.1
 GET http://localhost:3000/list HTTP/1.1
 
 ###
+# subjects list
+GET http://localhost:3000/list-subjects HTTP/1.1
+
+###
 # create task
 POST http://localhost:3000/task HTTP/1.1
 content-type: application/json

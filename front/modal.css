@@ -16,7 +16,8 @@
 }
 
 .modal-container {
-  width           : 300px;
+  width           : 30em;
+  height          : 10em;
   margin          : 0px auto;
   padding         : 20px 30px;
   background-color: #fff;
@@ -26,16 +27,15 @@
   font-family     : Helvetica, Arial, sans-serif;
 }
 
-.modal-header h3 {
-  margin-top: 0;
-  color     : #42b983;
+.modal-header p {
+  font-weight: bolder;
 }
 
 .modal-body {
   margin: 20px 0;
 }
 
-.modal-default-button {
+.modal-buttons {
   float: right;
 }
 
@@ -60,4 +60,8 @@
 .modal-leave-active .modal-container {
   -webkit-transform: scale(1.1);
   transform        : scale(1.1);
+}
+
+.modal-input-text {
+  width: 100%;
 }
